@@ -22,13 +22,13 @@ const Testimonial = ({ testimonials }) => {
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials?.map((testimonial, index) => (
             <div
-              key={testimonial.id}
+              key={testimonial._id}
               className={`${index === currentIndex ? 'block' : 'hidden'} text-center border p-4 rounded-md shadow-lg`}
             >
-              <img src={testimonial.avatar} alt={testimonial.name} className="w-24 h-24 mx-auto mb-4 rounded-full" />
-              <p className="text-lg mb-4">{testimonial.text}</p>
+              <img src={testimonial.image.url} alt={testimonial.name} className="w-24 h-24 mx-auto mb-4 rounded-full" />
+              <p className="text-lg mb-4">{testimonial.review}</p>
               <h3 className="text-xl font-semibold mb-2">{testimonial.name}</h3>
-              <p className="text-md">{testimonial.company}</p>
+              <p className="text-md">{testimonial.position}</p>
             </div>
           ))}
         </div>

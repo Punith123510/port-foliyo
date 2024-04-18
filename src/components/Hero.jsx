@@ -13,7 +13,7 @@ const Hero = ({ heroData }) => {
           </button>
         </div>
         <div className="text-center md:text-right">
-          <img src={heroData?.avatar} alt={heroData?.name} className="rounded-full w-32 h-32 mx-auto md:mx-0" />
+          <img src={heroData?.avatar.url} alt={heroData?.name} className="rounded-full w-32 h-32 mx-auto md:mx-0" />
         </div>
       </div>
     </section>

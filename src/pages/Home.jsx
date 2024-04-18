@@ -4,7 +4,6 @@ import Header from '../components/Header';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import Services from '../components/Services';
-//import Skills from '../components/Skills';
 import Projects from '../components/Projects';
 import Timeline from '../components/Timeline';
 import Testimonial from '../components/Testimonial';
@@ -14,41 +13,52 @@ import Skills from '../components/Skills';
 function Home() {
   const params = useParams();
   const navigate = useNavigate();
-  const userId = '65b3a22c01d900e96c4219ae'; // John Doe
+  const userId = '65b3a22c01d900e96c4219ae';
   const BASE_URL = 'https://portfolio-backend-30mp.onrender.com/api/v1';
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  //const [isSending, setIsSending] = useState(false);
+
+  // Define helper functions before they are called within the component
+  const getSortedFilteredItems = (items) => {
+    return items?.filter((item) => item.enabled)?.sort((a, b) => a.sequence - b.sequence) || [];
+  };
+
+  const getFilteredItems = (items, isEducation = null) => {
+    return items?.filter((item) => item.enabled && (isEducation === null || item.forEducation === isEducation)) || [];
+  };
 
   useEffect(() => {
     document.cookie = `portfolio-name=portfolio1`;
+
     const fetchUserData = async () => {
       try {
         const response = await fetch(`${BASE_URL}/get/user/${params?.user ?? userId}`);
         const userData = await response.json();
-        document.title = `${userData?.user?.about?.name + ' - ' + userData?.user?.about?.title}`;
+        document.title = `${userData?.user?.about?.name} - ${userData?.user?.about?.title}`;
         setUser(userData?.user);
         setIsLoading(false);
         document.body.classList.remove('loaded');
       } catch (error) {
         navigate('/');
-        setIsLoading(true);
-        console.error('Error fetching user data:', error);
+        setIsLoading(false);
+        console.error('Error fetching user data:', error)
+        
       }
     };
+
     fetchUserData();
   }, [params?.user, userId, navigate]);
 
-  console.log(user);
+  const sortedFilteredSkills = getSortedFilteredItems(user?.skills);
+  const sortedFilteredProject = getSortedFilteredItems(user?.projects);
+  const filteredServices = getFilteredItems(user?.services);
+  const filteredTestimonials = getFilteredItems(user?.testimonials);
+  const filteredSocialHandles = getFilteredItems(user?.social_handles);
+  const filteredEducation = getFilteredItems(user?.timeline, true);
+  const filteredExperience = getFilteredItems(user?.timeline, false);
 
-  // Filtering and sorting data from the API
-  const sortedFilteredSkills = user?.skills?.filter((item) => item.enabled)?.sort((a, b) => a.sequence - b.sequence);
-  const sortedFilteredProject = user?.projects?.filter((item) => item.enabled)?.sort((a, b) => a.sequence - b.sequence);
-  const filteredServices = user?.services?.filter((item) => item.enabled);
-  const filteredTestimonials = user?.testimonials?.filter((item) => item.enabled);
-  const filteredSocialHandles = user?.social_handles?.filter((item) => item.enabled);
-  const filteredEducation = user?.timeline?.filter((item) => item.forEducation && item.enabled);
-  const filteredExperience = user?.timeline?.filter((item) => !item.forEducation && item.enabled);
+  
+
 
   if (isLoading) {
     return <div className="w-full h-screen bg-black flex items-center justify-center text-center">Loading...</div>;

@@ -18,7 +18,7 @@ const Timeline = ({ education, experience }) => {
         <div className="border p-4 rounded-md shadow-lg">
           <h3 className="text-xl font-semibold mb-4">Experience</h3>
           {experience?.map((item) => (
-            <div key={item.id} className="mb-4">
+            <div key={item._id} className="mb-4">
               <h4 className="text-lg font-semibold mb-2">{item.company_name}</h4>
               <p className="text-md">{item.jobTitle}</p>
               <p className="text-md">{item.startDate} - {item.endDate}</p>
